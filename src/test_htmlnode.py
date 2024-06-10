@@ -1,5 +1,5 @@
 import unittest
-from htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 class TestHTMLNode(unittest.TestCase):
     def setUp(self):
@@ -33,12 +33,31 @@ class TestLeafNode (unittest.TestCase):
         self.button_node = LeafNode("Submit", "button", {"type": "submit", "disabled":""})
         self.button_html = "<button type=\"submit\" disabled>Submit</button>"
         self.p_html = "<p class=\"body_p\" id=\"test_text\">Test child</p>"
+        self.self_closing = LeafNode("", "br", None, True)
+        self.self_closing_html = "<br>"
 
     def test_to_html_p(self):
         self.assertEqual(self.p_node.to_html(), self.p_html)
 
     def test_to_html_button(self):
         self.assertEqual(self.button_node.to_html(), self.button_html)
+
+    def test_to_html_self_closing(self):
+        self.assertEqual(self.self_closing.to_html(), self.self_closing_html)
+
+class TestParentNode (unittest.TestCase):
+    def setUp(self):
+        self.child_node = LeafNode("Test child", "p", {"class": "body_p", "id": "test_text"})
+        self.div = ParentNode([self.child_node],"div", {"class": "container"})
+        self.parent_div = ParentNode([self.div, self.child_node], "div", None)
+        self.div_html = "<div class=\"container\"><p class=\"body_p\" id=\"test_text\">Test child</p></div>"
+        self.parent_html = "<div><div class=\"container\"><p class=\"body_p\" id=\"test_text\">Test child</p></div><p class=\"body_p\" id=\"test_text\">Test child</p></div>"
+
+    def test_to_html_div(self):
+        self.assertEqual(self.div.to_html(), self.div_html)
+
+    def test_to_html_parent_div(self):
+        self.assertEqual(self.parent_div.to_html(), self.parent_html) 
 
 
 
