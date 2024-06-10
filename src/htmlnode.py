@@ -37,3 +37,19 @@ class HTMLNode:
 
         print_string = f"{name_str}(\'{tag_str}\', \'{value_str}\', \'{children_str}\', \'{props_str}\')"
         return print_string
+
+class LeafNode(HTMLNode):
+    def __init__(self, value, tag = None, props = None):
+        super().__init__(tag, value, None, props)
+
+    def to_html(self):
+        if self.value == None:
+            raise ValueError("The \'value\' parameter is required to construct a leaf node.")
+        if self.tag == None:
+            return self.value
+        opening_tag = f"<{self.tag}{self.props_to_html()}>"
+        closing_tag = f"</{self.tag}>"
+        return f"{opening_tag}{self.value}{closing_tag}"
+        
+
+

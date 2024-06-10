@@ -1,5 +1,5 @@
 import unittest
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode
 
 class TestHTMLNode(unittest.TestCase):
     def setUp(self):
@@ -25,6 +25,21 @@ class TestHTMLNode(unittest.TestCase):
 
     def test_print(self):
         self.assertEqual(self.div.__repr__(), self.print_div)
+
+
+class TestLeafNode (unittest.TestCase):
+    def setUp(self):
+        self.p_node = LeafNode("Test child", "p", {"class": "body_p", "id": "test_text"})
+        self.button_node = LeafNode("Submit", "button", {"type": "submit", "disabled":""})
+        self.button_html = "<button type=\"submit\" disabled>Submit</button>"
+        self.p_html = "<p class=\"body_p\" id=\"test_text\">Test child</p>"
+
+    def test_to_html_p(self):
+        self.assertEqual(self.p_node.to_html(), self.p_html)
+
+    def test_to_html_button(self):
+        self.assertEqual(self.button_node.to_html(), self.button_html)
+
 
 
 if __name__ == "__main__":
