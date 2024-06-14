@@ -1,15 +1,15 @@
 import unittest
-from textnode import TextNode
+from textnode import TextNode, TextType
 from converttextnode import text_node_to_html_node
 
 class TestConvertTextNode(unittest.TestCase):
     def setUp(self):
-        self.text_type_text = TextNode("This is some raw text", "text")
-        self.text_type_bold = TextNode("This is some bold text", "bold")
-        self.text_type_italic = TextNode("This is some italic text", "italic")
-        self.text_type_code = TextNode("This is some code text", "code")
-        self.text_type_link = TextNode("This is a link","link", "https://localhost:8888")
-        self.text_type_image = TextNode("This is some alt text", "image", "https://localhost:8888")
+        self.text_type_text = TextNode("This is some raw text", TextType.TEXT)
+        self.text_type_bold = TextNode("This is some bold text", TextType.BOLD)
+        self.text_type_italic = TextNode("This is some italic text", TextType.ITALIC)
+        self.text_type_code = TextNode("This is some code text", TextType.CODE)
+        self.text_type_link = TextNode("This is a link",TextType.LINK, "https://localhost:8888")
+        self.text_type_image = TextNode("This is some alt text", TextType.IMAGE, "https://localhost:8888")
         self.expected_text = "This is some raw text"
         self.expected_bold = "<b>This is some bold text</b>"
         self.expected_italic = "<i>This is some italic text</i>"

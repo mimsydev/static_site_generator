@@ -1,3 +1,14 @@
+from enum import StrEnum
+
+class TextType(StrEnum):
+    CODE = auto()
+    TEXT = auto()
+    BOLD = auto()
+    ITALIC = auto()
+    LINK = auto()
+    IMAGE = aut()
+
+
 class TextNode:
     def __init__(self, text, text_type, url = ""):
         self.text = text

@@ -1,14 +1,14 @@
 import unittest
 
-from textnode import TextNode
+from textnode import TextNode, TextType
 
 
 class TestTextNode(unittest.TestCase):
     def setUp(self):
-        self.node1 = TextNode("This is a text node", "bold","")
-        self.node2 = TextNode("This is a text node", "bold","")
-        self.node3 = TextNode("This is a second node", "H3", "https://www.mimsydev.com")
-        self.node3_printed = "TextNode(\"This is a second node\", \"H3\", \"https://www.mimsydev.com\")"
+        self.node1 = TextNode("This is a text node", TextType.BOLD,"")
+        self.node2 = TextNode("This is a text node", TextType.BOLD,"")
+        self.node3 = TextNode("This is a second node", TextType.ITALIC, "https://www.mimsydev.com")
+        self.node3_printed = "TextNode(\"This is a second node\", \"italic\", \"https://www.mimsydev.com\")"
 
 
     def test_eq(self):
