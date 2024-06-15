@@ -15,7 +15,7 @@ def text_node_to_html_node(text_node):
     if text_node.text_type not in valid_text_types.keys():
         text_type = text_node.text_type
         valid_types = "',".join(valid_text_types.keys())
-        raise ValueError(f"The text_type '{text_type}' is not supported. The accepted text_types are '{valid_types.keys()}'.")
+        raise ValueError(f"The text_type '{text_type}' is not supported. The accepted text_types are '{valid_types}'.")
 
     text_info = valid_text_types[text_node.text_type]
     tag = text_info[0] if len(text_info[0]) > 0 else None
