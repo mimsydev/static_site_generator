@@ -2,6 +2,14 @@ from collections.abc import Callable
 import textnode as tn
 import re
 
+def extract_markdown_images(text: str) -> list[tuple[str, str]]:
+    matches = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
+    return matches
+
+def extract_markdown_links(text: str) -> list[tuple[str, str]]:
+    matches = re.findall(r"\[(.*?)\]\((.*?)\)", text)
+    return matches
+
 def split_nodes_recursive(text: str, typed_splitters: list[tuple[str,tn.TextType]]) -> list[tuple[str, tn.TextType]]:
     def helper(text: str, 
                typed_splitters: list[tuple[str, tn.TextType]], 
@@ -17,7 +25,7 @@ def split_nodes_recursive(text: str, typed_splitters: list[tuple[str,tn.TextType
             arr.append((split_string[0], tn.TextType.TEXT))
             arr.append((splitter, text_type))
             return helper("".join(split_string[1:]), typed_splitters[1:], arr)
-    
+
     return helper(text, typed_splitters, [])
 
 def split_nodes_wrapped(nodes: list[tn.TextNode], splitter_tuple: tuple[str, tn.TextType]):
@@ -95,11 +103,3 @@ def split_nodes_link(old_nodes: list[tn.TextNode]) -> list[tn.TextNode]:
     extractor = extract_markdown_links
 
     return split_nodes_unwrapped(old_nodes, target_type, search_pattern, extractor)
-
-def extract_markdown_images(text: str) -> list[tuple[str, str]]:
-    matches = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
-    return matches
-
-def extract_markdown_links(text: str) -> list[tuple[str, str]]:
-    matches = re.findall(r"\[(.*?)\]\((.*?)\)", text)
-    return matches
