@@ -1,9 +1,14 @@
+from typing import Sequence, TypeVar
+
+
 class HTMLNode:
     # tag string
     # value string
     # children List<HTMLNode>
     # props Dictionary<string, string>
-    def __init__(self,tag=None, value=None, children=None, props=None, self_closing = False):
+    def __init__(self,tag: str | None = None, value: str | None = None,
+                 children: list[object] | None = None, props: dict[str, str] | None = None,
+                 self_closing: bool = False) -> None:
         self.tag = tag
         self.value = value
         self.children = children
@@ -40,7 +45,8 @@ class HTMLNode:
         return print_string
 
 class LeafNode(HTMLNode):
-    def __init__(self, value, tag = None, props = None, self_closing = False):
+    def __init__(self, value: str, tag:str | None = None, props: dict[str, str] | None = None,
+                 self_closing: bool = False):
         super().__init__(tag, value, None, props, self_closing)
 
     def to_html(self):
@@ -56,11 +62,11 @@ class LeafNode(HTMLNode):
         return f"{opening_tag}{self.value}{closing_tag}"
 
 class ParentNode(HTMLNode):
-    def __init__(self, children, tag = None, props = None):
+    def __init__(self, children: list[HTMLNode], tag: str | None = None, props: dict[str, str] | None = None) -> None:
         super().__init__(tag, None, children, props, False)
 
-    def to_html(self):
-        if len(self.children) <= 0:
+    def to_html(self) -> str:
+        if self.children == None:
             raise ValueError("A parent node must have children supplied. That's the point of being a parent...")
         if self.tag == None:
             raise ValueError("A tag must be provided for a parent node")

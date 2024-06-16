@@ -2,12 +2,14 @@ def markdown_to_blocks(text: str) -> list[str]:
     string_blocks: list[str] = []
     split_text = text.split("\n")
     block: list[str] = []
-    for split in split_text:
+    for i, split in enumerate(split_text):
         clean_split = split.strip()
         if len(clean_split) > 1:
             block.append(clean_split)
-        else:
+        elif i < len(split_text) -1:
             string_blocks.append("\n".join(block))
+            block = []
+        else:
             block = []
 
     return string_blocks

@@ -1,7 +1,7 @@
 from textnode import TextNode, TextType
 from htmlnode import LeafNode
 
-def text_node_to_html_node(text_node):
+def text_node_to_html_node(text_node: TextNode) -> LeafNode:
     valid_text_types = { \
             #"type": ("tag", "self_closing", ("[v]alue[p]rops", ["prop1", "prop2", ...]))
             TextType.TEXT: ("", False, ("v", None)), \
@@ -21,8 +21,8 @@ def text_node_to_html_node(text_node):
     tag = text_info[0] if len(text_info[0]) > 0 else None
     self_closing = text_info[1]
     format = text_info[2][0]
-    value = ""
-    props = {}
+    value: str = ""
+    props: dict[str, object] = {}
 
     match format:
         case "v":

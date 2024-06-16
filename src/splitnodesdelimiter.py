@@ -81,7 +81,7 @@ def split_nodes_unwrapped(nodes: list[tn.TextNode],
 def split_nodes_delimiter(old_nodes: list[tn.TextNode]) -> list[tn.TextNode]:
     new_nodes = old_nodes
     splitters = [("`", tn.TextType.CODE), ("**", tn.TextType.BOLD),
-                     ("__", tn.TextType.BOLD), ("*", tn.TextType.ITALIC),
+                     ("__", tn.TextType.BOLD),
                      ("_", tn.TextType.ITALIC)]
     for splitter in splitters:
         new_nodes = split_nodes_wrapped(new_nodes, splitter)
