@@ -64,10 +64,10 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
 
     html = template.replace("{{ Title }}", header).replace("{{ Content }}", content)
 
-    Path(dest_path_abs).mkdir(parents=True, exist_ok=True)
+    target_file = Path(dest_path_abs)
+    target_file.parent.mkdir(parents=True, exist_ok=True)
+    target_file.write_text(html)
 
-    with open(os.path.join(dest_path_abs, "index.html"), "w") as file:
-        file.write(html)
 
 def main() -> None:
     movedirtodir()

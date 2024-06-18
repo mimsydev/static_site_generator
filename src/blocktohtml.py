@@ -27,7 +27,7 @@ def block_to_html(block: Block) -> ParentNode | None:
 
             #format for list type
             if list_format == "ul":
-                leader = "* "
+                leader = node.value[0:1]
             elif list_format == "ol":
                 leader = f"{li_count}. "
             else: 
@@ -42,8 +42,8 @@ def block_to_html(block: Block) -> ParentNode | None:
             next_node = None if list_length < i + 2 else nodes[i + 1]
 
             # if this is a stand-alone list node, add it to the nodes list
-            if (node != None and node.tag == None and node.value.startswith(leader)) \
-                    and (next_node == None or next_node.value.startswith(leader)):
+            if (node and node.tag and node.value.startswith(leader)) \
+                    and (not next_node or next_node.value.startswith(leader)):
                 if p_node != None:
                     c_nodes.append(p_node)
                     p_node = None
