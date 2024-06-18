@@ -1,12 +1,11 @@
-from os.path import isfile
-from textnode import TextNode
 import os
 from pathlib import Path
 import shutil
+from markdowntohtml import markdown_to_html_node 
+
 
 def movedirtodir(path_from: str = "static", path_to: str = "public") -> None:
     ROOT_DIR = Path(__file__).resolve().parent.parent
-
     path_from_abs = os.path.join(ROOT_DIR, path_from)
     path_to_abs = os.path.join(ROOT_DIR, path_to)
 
@@ -31,8 +30,48 @@ def movedirtodir(path_from: str = "static", path_to: str = "public") -> None:
                shutil.copy(path_from_el, path_to_el)
             print("Success!")
 
+def extract_title(markdown :str) -> str:
+    if markdown:
+        splits = markdown.split("\n")
+        if not splits[0].startswith("# "):
+            raise ValueError("The document did not start with a title")
+        else:
+            return splits[0].lstrip("# ")
+    else:
+        raise ValueError("There was no markdown provided")
+
+def generate_page(from_path: str, template_path: str, dest_path: str):
+    ROOT_DIR = Path(__file__).resolve().parent.parent
+    from_path_abs = os.path.join(ROOT_DIR, from_path)
+    dest_path_abs = os.path.join(ROOT_DIR, dest_path)
+    template_path_abs = os.path.join(ROOT_DIR, template_path)
+    
+    print(f"Generating page from '{from_path_abs}' to '{dest_path_abs}'"
+          f"using '{template_path_abs}'.")
+
+    md: str = ""
+    with open(from_path_abs, "r") as file:
+        md = file.read()
+
+    template: str = ""
+    with open(template_path_abs, "r") as file:
+        template = file.read()
+
+    header = extract_title(md)
+
+    content = "\n".join(list(map(lambda n: n.to_html(),
+                                 markdown_to_html_node(md))))
+
+    html = template.replace("{{ Title }}", header).replace("{{ Content }}", content)
+
+    Path(dest_path_abs).mkdir(parents=True, exist_ok=True)
+
+    with open(os.path.join(dest_path_abs, "index.html"), "w") as file:
+        file.write(html)
+
+
+
 if __name__  == "__main__":
-    movedirtodir()
 
 
 
