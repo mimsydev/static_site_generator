@@ -69,9 +69,10 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
     with open(os.path.join(dest_path_abs, "index.html"), "w") as file:
         file.write(html)
 
-
+def main() -> None:
+    movedirtodir()
+    generate_page(from_path="content/index.md", template_path="template.html",
+                  dest_path="public/index.html")
 
 if __name__  == "__main__":
-
-
-
+    main()
