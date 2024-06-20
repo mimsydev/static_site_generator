@@ -6,8 +6,9 @@ def markdown_to_blocks(text: str) -> list[str]:
         clean_split = split.strip()
         if len(clean_split) > 1:
             block.append(clean_split)
-        elif i < len(split_text) -1:
-            string_blocks.append("\n".join(block))
+        elif i < len(split_text):
+            if(len(split_text) > 0):
+                string_blocks.append("\n".join(block))
             block = []
         else:
             block = []

@@ -17,20 +17,38 @@ def block_to_html(block: Block) -> ParentNode | None:
                                list(map(text_to_textnodes, body_lines)) 
                                for node in node_list]
                               ))
+    """
 
+    Takes a list of HTMLNodes and a list format (ul/ol) and returns a parent node with all nested
+    nodes as children. 
+
+    Args:
+        nodes: List[HTMLNode]
+        list_format: str (ul/ol)
+
+    Returns:
+        ParentNode
+
+    """
     def to_list(nodes: list[HTMLNode], list_format: str) -> ParentNode:
         c_nodes: list[HTMLNode] = []
         p_node: ParentNode | None = None
         list_length = len(nodes)
         li_count = 1
+        leader = ""
+        # format for unordered list type
+        if list_format == "ul":
+            leader = nodes[0].value[0:1]
+            print("LEADER")
+            print(leader)
+
         for i, node in enumerate(nodes):
 
-            #format for list type
-            if list_format == "ul":
-                leader = node.value[0:1]
-            elif list_format == "ol":
+            #format for ordered list type
+            if list_format == "ol":
                 leader = f"{li_count}. "
-            else: 
+                
+            if leader == "":
                 raise ValueError(f"The list format '{list_format}'is invalid")
 
             #Validate nodes

@@ -34,17 +34,16 @@ def extract_title(markdown :str) -> str:
     if markdown:
         splits = markdown.split("\n")
         if not splits[0].startswith("# "):
-            raise ValueError("The document did not start with a title")
+            raise ValueError(f"The document did not start with a title: {splits[0]}")
         else:
             return splits[0].lstrip("# ")
     else:
         raise ValueError("There was no markdown provided")
 
-def generate_page(from_path: str, template_path: str, dest_path: str):
-    ROOT_DIR = Path(__file__).resolve().parent.parent
-    from_path_abs = os.path.join(ROOT_DIR, from_path)
-    dest_path_abs = os.path.join(ROOT_DIR, dest_path)
-    template_path_abs = os.path.join(ROOT_DIR, template_path)
+def generate_page(from_path: str, template_path: str, dest_path: str, root_path: Path):
+    from_path_abs = os.path.join(root_path, from_path)
+    dest_path_abs = os.path.join(root_path, dest_path)
+    template_path_abs = os.path.join(root_path, template_path)
     
     print(f"Generating page from '{from_path_abs}' to '{dest_path_abs}'"
           f"using '{template_path_abs}'.")
@@ -68,11 +67,35 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
     target_file.parent.mkdir(parents=True, exist_ok=True)
     target_file.write_text(html)
 
+def generate_pages_recursive(dir_path_content: str, 
+                             template_path: str, dest_dir_path: str, 
+                             root_path: Path = Path("")) -> None:
+    if root_path == Path(""):
+        root_path = Path(__file__).resolve().parent.parent
+
+    from_path_abs = os.path.join(root_path, dir_path_content)
+    dest_path_abs = os.path.join(root_path, dest_dir_path)
+    template_path_abs = os.path.join(root_path, template_path)
+
+    with os.scandir(from_path_abs) as elements:
+        for element in elements:
+            path_from_el = os.path.join(from_path_abs, element.name) 
+            if element.is_dir():
+                path_to_el = os.path.join(dest_path_abs, element.name)
+                return generate_pages_recursive(path_from_el, template_path_abs,
+                                                path_to_el, root_path)
+            elif element.is_file() and os.path.splitext(element.path)[-1].lower() \
+                .endswith(".md"):
+                path_to_el = os.path.join(dest_path_abs, element.name)
+                generate_page(path_from_el, template_path_abs,
+                              path_to_el.replace(".md",".html"), root_path)
+    return
+
 
 def main() -> None:
     movedirtodir()
-    generate_page(from_path="content/index.md", template_path="template.html",
-                  dest_path="public/index.html")
+    generate_pages_recursive(dir_path_content="content/", template_path="template.html",
+                  dest_dir_path="public/")
 
 if __name__  == "__main__":
     main()
